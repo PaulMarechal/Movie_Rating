@@ -10,12 +10,13 @@ import axios from 'axios';
 const HomeScreen = ({ navigation }) => {
   const [notif, setNotif] = useState(0);
   const apiurl = "http://www.omdbapi.com/?apikey=ca9a4845"
+  
 
   const [defaultRating, setDefaultRating] = useState(2)
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5])
 
-  const starImgFilled = 'https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png'
-  const starImgCorner = 'https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png'
+  const starImgFilled = 'https://paulmarechal.xyz/assets/images/star_filled.png'
+  const starImgCorner = 'https://paulmarechal.xyz/assets/images/star_corner.png'
 
   const CustomRatingBar = () => {
     return (
@@ -96,7 +97,7 @@ const HomeScreen = ({ navigation }) => {
 
 
     <View style={styles.container}>
-      <Text style={styles.titre}>Cinémathèque</Text>
+      {/* <Text style={styles.titre}>Cinémathèque</Text> */}
       <TextInput 
         style={styles.searchBar} 
         placeholder="rechercher un film"
@@ -122,22 +123,22 @@ const HomeScreen = ({ navigation }) => {
           
           <TouchableHighlight underlayColor='#fff' onPress={() => setState(prevState => {
             return { ...prevState, selected: {} } })} >
-            <View style={styles.styleButton}>
+            <View style={styles.styleButtonRetour}>
               <Text style={styles.retour}>◀ Retour</Text>
             </View>
         </TouchableHighlight>
 
           <Text style={styles.modalTitle}>{state.selected.Title}</Text>
           <View style={styles.modalInfo}>
-            <Text style={styles.modalText}>🎬 {state.selected.Writer}</Text>
-            <Text style={styles.modalText}>📅 {state.selected.Year}</Text>
-            <Text style={styles.modalText}>🏆 {state.selected.Awards}</Text>
-            <Text style={styles.modalText}>📓 {state.selected.Plot}</Text>
-            <Text style={styles.modalText}>🖥 {state.selected.Website}</Text>
+            <Text style={styles.modalText}>🎬 Writer : {"\n"}{state.selected.Writer}</Text>
+            <Text style={styles.modalText}>📅 Year : {state.selected.Year}</Text>
+            <Text style={styles.modalText}>🏆 Prix : {"\n"}{state.selected.Awards}</Text>
+            <Text style={styles.modalText}>📓 Plot : {"\n"}{state.selected.Plot}</Text>
+            <Text style={styles.modalText}>🖥 Website : {state.selected.Website}</Text>
           </View>
 
           <View style={styles.modalInfo}>
-            {/* <Text style={styles.modalText}>Laisser une note : </Text> */}
+            {/* <Text style={styles.modalText}>Add a rating : </Text> */}
             <CustomRatingBar/>
             <Text style={styles.modalTextRating}>
               {defaultRating + ' / ' + maxRating.length}
@@ -172,12 +173,12 @@ const App = () => {
   return (
     <NavigationContainer>
       <Tabs.Navigator
-        initialRouteName="Home"
+        initialRouteName="Film"
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, size, color }) => {
             let iconName;
-            if (route.name == "Home") {
-              iconName = focused ? "home" : "home-outline";
+            if (route.name == "Film") {
+              iconName = focused ? "film" : "film-outline";
             } else if (route.name == "Settings") {
               iconName = focused ? "settings" : "settings-outline";
             }
@@ -187,7 +188,7 @@ const App = () => {
           tabBarInactiveTintColor: "grey",
         })}
       >
-        <Tabs.Screen name="Home" component={HomeScreen} />
+        <Tabs.Screen name="Film" component={HomeScreen} />
         <Tabs.Screen
           name="Settings"
           component={SettingsScreen}
@@ -223,7 +224,8 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#f2f2f2',
     borderRadius: 7,
-    marginBottom: 40 
+    marginBottom: 40,
+    marginTop: 15
   },
   result: {
     flex: 1, 
@@ -282,6 +284,12 @@ const styles = StyleSheet.create({
   styleButton: {
     backgroundColor: '#FFF',
     marginBottom: 10
+  },
+
+  styleButtonRetour: {
+    backgroundColor: '#FFF',
+    marginBottom: 10,
+    marginTop: -30
   },
 
   resultFilm: {
