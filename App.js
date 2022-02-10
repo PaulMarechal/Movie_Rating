@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
-import { Button, Text, View, StyleSheet, TextInput, ScrollView, Image, TouchableHighlight, Modal } from "react-native";
+import { Button, Text, View, StyleSheet, TextInput, ScrollView, Image, TouchableHighlight, Modal, TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import axios from 'axios';
 
@@ -10,6 +10,34 @@ import axios from 'axios';
 const HomeScreen = ({ navigation }) => {
   const [notif, setNotif] = useState(0);
   const apiurl = "http://www.omdbapi.com/?apikey=ca9a4845"
+
+  const [defaultRating, setDefaultRating] = useState(2)
+  const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5])
+
+  const starImgFilled = 'https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png'
+  const starImgCorner = 'https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png'
+
+  const CustomRatingBar = () => {
+    return (
+      <View style={styles.customRatingBarStyle}>
+        {
+          maxRating.map((item, key) => {
+          return(
+            <TouchableOpacity
+              activeOpacity={0.7}
+              key={item}
+              onPress={() => setDefaultRating(item)}>
+                <Image 
+                  style={styles.starImgStyle}
+                  source={item <= defaultRating ? {uri: starImgFilled} : {uri: starImgCorner}}
+                />
+              </TouchableOpacity>
+          )
+        })
+        }
+      </View>
+    )
+  }
 
   const [state, setState] = useState({
     s:"", 
@@ -106,6 +134,14 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.modalText}>🏆 {state.selected.Awards}</Text>
             <Text style={styles.modalText}>📓 {state.selected.Plot}</Text>
             <Text style={styles.modalText}>🖥 {state.selected.Website}</Text>
+          </View>
+
+          <View style={styles.modalInfo}>
+            {/* <Text style={styles.modalText}>Laisser une note : </Text> */}
+            <CustomRatingBar/>
+            <Text style={styles.modalTextRating}>
+              {defaultRating + ' / ' + maxRating.length}
+            </Text>
           </View>
 
         </View>
@@ -252,6 +288,32 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 20,
     backgroundColor: '#f1f1f1'
+  }, 
+
+  customRatingBarStyle: {
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginTop: 30
+  }, 
+
+  starImgStyle: {
+    width: 40, 
+    height: 40, 
+    resizeMode: 'cover'
+  }, 
+
+  buttonStyle: {
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginTop: 30, 
+    backgroundColor: 'green'
+  }, 
+
+  modalTextRating: {
+    textAlign: 'center',
+    fontWeight: '200',
+    fontSize: 17,
+    marginTop: 15,
   }
 
 });
